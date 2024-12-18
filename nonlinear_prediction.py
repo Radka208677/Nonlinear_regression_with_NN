@@ -45,12 +45,12 @@ train_dataset, test_dataset = random_split(full_dataset, [train_size, test_size]
 dataloader = DataLoader(train_dataset, batch_size=20, shuffle=True)
 test_dataloader = DataLoader(test_dataset, batch_size=20, shuffle=False)
 
-# Inicializace modelu, loss funkcie a optimizéra
+# Inicializace modelu, loss funkce a optimizéra
 model = NonLinearModel()
 criterion = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=0.01)
 
-# Tréningová slučka s learning rate decay
+# Tréningová smyčka s learning rate decay
 num_epochs = 200
 scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=50, gamma=0.5)
 
@@ -62,14 +62,14 @@ y_true = full_dataset.y.numpy()
 for epoch in range(num_epochs):
     epoch_loss = 0
     for batch_x, batch_y in dataloader:
-        # Predikcia
+        # Predikce
         outputs = model(batch_x)
         
         # Výpočet chyby
         loss = criterion(outputs, batch_y)
         epoch_loss += loss.item()
         
-        # Backpropagation a optimalizácia
+        # Backpropagation a optimalizace
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
@@ -86,7 +86,7 @@ for epoch in range(num_epochs):
         plt.plot(x_vals, y_pred, color="red", label="Predikce")
         plt.title(f"Epoch {epoch + 1}")
         plt.legend()
-        plt.pause(2)  # Zobrazí graf na 5 sekundy
+        plt.pause(2)  # Zobrazí graf na 2 sekundy
         plt.close()
 
     # Vypsaní loss
@@ -100,10 +100,10 @@ plt.title("Průběh MSELoss v rámci epoch")
 plt.xlabel("Epochy")
 plt.ylabel("MSELoss")
 plt.legend()
-plt.pause(5)  # Zobrazí graf na 3 sekundy
+plt.pause(5)  # Zobrazí graf na 5 sekund
 plt.close()
 
-# Vyhodnocení na test. sete
+# Vyhodnocení na test. setu
 model.eval()
 test_losses = []
 test_x_vals = []
@@ -127,7 +127,7 @@ test_y_true = torch.cat([torch.tensor(arr) for arr in test_y_true]).numpy()
 test_y_pred = torch.cat([torch.tensor(arr) for arr in test_y_pred]).numpy()
 
 plt.figure(figsize=(10, 5))
-plt.scatter(test_x_vals, test_y_true, label="Skutočná data", alpha=0.6)
+plt.scatter(test_x_vals, test_y_true, label="Skutečná data", alpha=0.6)
 plt.scatter(test_x_vals, test_y_pred, color="red", label="Predikce", alpha=0.6)
 plt.title("Predikce na testovacím sete")
 plt.legend()
